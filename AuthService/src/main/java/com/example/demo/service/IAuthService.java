@@ -6,6 +6,12 @@ public interface IAuthService {
 
 	public String addUser(UserInfo userInfo);
 	
-	public void validateToken(String token);
+	public boolean validateToken(String token);
 	public String generateToken(String userName);
+	
+	public String generateAccessToken(String userName);
+	public String generateRefreshToken(String userName);
+	
+	public String getUsernameFromToken(String token);
+	
 }

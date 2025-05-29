@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.example.demo.dto.UserInfoDetails;
 import com.example.demo.service.impl.UserInfoDetailsService;
 
 @Configuration
@@ -24,7 +23,7 @@ public class AuthConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	return	http.csrf(csrf->csrf.disable())
 		.authorizeHttpRequests(auth->auth.requestMatchers("/auth/registrationUser",
-				"/auth/generateToken","/auth/validateToken").permitAll())
+				"/auth/generateToken","/auth/validateToken","/auth/refreshtoken").permitAll())
 		.build();
 	}
 	

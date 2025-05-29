@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -15,8 +17,18 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 	
-	public static final String SECRET_KEY="bfdbdsfbdf7435bfbhdsf33247324jf7r478r4378584";
-	
+	public static final long RECOVERY_TIME = 86_400_000;
+	public static final long EXPIRATION_TIME = 864_000_000;
+
+	@Value("${app.jwt-secret}")
+    private String jwtSecret;
+
+    @Value("${app.jwt-expiration-ms}")
+    private int jwtExpirationMs;
+
+    @Value("${app.refresh-token-expiration-ms}")
+    private int refreshTokenExpirationMs;
+    
 	public String generateToken(String userName) {
 		Map<String,Object> claims=new HashMap<>();
 		long currentTime=System.currentTimeMillis();
@@ -28,14 +40,38 @@ public class JwtService {
 				.compact();
 	}
 	
-	public void validateToken(String token) {
-		Jwts.parserBuilder().setSigningKey(getSignKey())
-		.build().parseClaimsJwt(token);
+	public String generateRefreshToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationMs))
+                .signWith(getSignKey(),SignatureAlgorithm.HS512)
+                .compact();
+    }
+	public String getUsernameFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+	
+	public boolean validateToken(String token) {
+		try {
+            Jwts.parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
 	}
 	
 	
 	private Key getSignKey() {
-		byte[] keyByteCoder=Decoders.BASE64.decode(SECRET_KEY);
+		byte[] keyByteCoder=Decoders.BASE64.decode(jwtSecret);
 		return Keys.hmacShaKeyFor(keyByteCoder);
 	}
 	

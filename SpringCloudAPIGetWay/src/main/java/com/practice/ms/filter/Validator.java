@@ -11,7 +11,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 public class Validator {
 
 	public static final List<String> openEndPoint=List.of(
-			"/registrationUser","/generateToken","/validateToken"
+			"/registrationUser","/generateToken","/validateToken","/refreshtoken"
 			);
 	Predicate<ServerHttpRequest> isSecure=serverHttpRequest-> openEndPoint.stream()
 			.noneMatch(uri-> serverHttpRequest.getURI().getPath().contains(uri));

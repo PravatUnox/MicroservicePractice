@@ -29,12 +29,28 @@ public class AuthServiceImpl implements IAuthService {
 	}
 	
 	
-	public void validateToken(String token) {
-		jwtService.validateToken(token);
+	public boolean validateToken(String token) {
+		return jwtService.validateToken(token);
 	}
 	
 	public String generateToken(String userName) {
 		return jwtService.generateToken(userName);
+	}
+
+	@Override
+	public String generateAccessToken(String userName) {
+		
+		return jwtService.generateToken(userName);
+	}
+
+	@Override
+	public String generateRefreshToken(String userName) {
+		return jwtService.generateRefreshToken(userName);
+	}
+
+	@Override
+	public String getUsernameFromToken(String token) {
+		return jwtService.getUsernameFromToken(token);
 	}
 
 }
