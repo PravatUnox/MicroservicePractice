@@ -22,6 +22,7 @@ public class JwtService {
 
 	@Value("${app.jwt-secret}")
     private String jwtSecret;
+	//aSdFgHjKlZxCvBnMqWeRtYuIoPaSdFgHjKlZxCvBnMqWeRtYuIoPaSdFgHjKlZCvBnMqWeRtYuIoPaSdFgHjKlZxCvBnMqWeRtYuIoPaSdFgHjKlZ
 
     @Value("${app.jwt-expiration-ms}")
     private int jwtExpirationMs;
