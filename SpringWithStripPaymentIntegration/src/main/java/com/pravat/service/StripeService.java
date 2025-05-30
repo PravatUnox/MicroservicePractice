@@ -13,8 +13,6 @@ import com.stripe.model.Charge;
 @Service
 public class StripeService {
 
-//STRIPE_PUBLIC_KEY = pk_test_JiuFR0cuML2ASFTuY7hzx41u00KvMOYGhB
-//STRIPE_SECRET_KEY = sk_test_btD1qX0jNE4XqfZmElgofQWm00qYIG05cu
 	  @Value("${STRIPE_SECRET_KEY}")
 	    private String API_SECRET_KEY;
 
